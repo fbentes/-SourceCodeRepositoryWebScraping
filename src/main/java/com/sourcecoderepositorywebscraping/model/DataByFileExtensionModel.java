@@ -4,6 +4,14 @@ import java.io.Serializable;
 
 import org.springframework.stereotype.Component;
 
+/**
+ * Model of soluction with properties lines and bytes of all files in repository.
+ * 
+ * @author fbent
+ * @version 1.0.0.0
+ * @since 19/10/2020
+ *
+ */
 @Component
 public class DataByFileExtensionModel  implements Serializable {
 

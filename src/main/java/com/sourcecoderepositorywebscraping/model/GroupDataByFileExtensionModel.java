@@ -9,6 +9,15 @@ import org.springframework.stereotype.Component;
 
 import com.google.gson.Gson;
 
+/**
+ * Model aggregate all the models that contais count lines and bytes of all files in repository.
+ * 
+ * @author fbent
+ *
+ * @author fbent
+ * @version 1.0.0.0
+ * @since 19/10/2020
+ */
 @Component
 public class GroupDataByFileExtensionModel  implements Serializable {
 
