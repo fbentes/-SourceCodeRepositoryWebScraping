@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.Gson;
 
 /**
@@ -19,16 +22,30 @@ import com.google.gson.Gson;
  * @since 19/10/2020
  */
 @Component
+@JsonPropertyOrder({ "repositoryUrl", "totalFileNumberOfLines", "totalFileNumberOfBytes", "httpError", "dataByFileExtensionModelList" })
 public class GroupDataByFileExtensionModel  implements Serializable {
 
 	private static final long serialVersionUID = -3410669692176028544L;
 	
 	private String repositoryUrl;
+	
 	private int totalFileNumberOfLines;
+	
+	@JsonIgnore
 	private float totalFileNumberOfBytes;
+	
+	@JsonProperty("totalFileNumberOfBytes")
+    private String fileNumberOfBytesFormated;
+	
 	private String httpError;
 	
 	private List<DataByFileExtensionModel> dataByFileExtensionModelList;
+	
+	public GroupDataByFileExtensionModel() {
+		totalFileNumberOfLines = 0;
+		totalFileNumberOfBytes = 0;
+		dataByFileExtensionModelList = new ArrayList<>();
+	}
 	
 	public String getRepositoryUrl() {
 		return repositoryUrl;
@@ -46,12 +63,11 @@ public class GroupDataByFileExtensionModel  implements Serializable {
 		return totalFileNumberOfBytes;
 	}
 
-	public GroupDataByFileExtensionModel() {
-		totalFileNumberOfLines = 0;
-		totalFileNumberOfBytes = 0;
-		dataByFileExtensionModelList = new ArrayList<>();
+	@JsonProperty("totalFileNumberOfBytes")
+	public String getTotalFileNumberOfBytesFormated() {
+		return fileNumberOfBytesFormated;
 	}
-	
+
 	public void addFileNumberOfLines(DataByFileExtensionModel dataByFileExtensionModel) {
 	
 		int index = dataByFileExtensionModelList.indexOf(dataByFileExtensionModel);
@@ -100,5 +116,9 @@ public class GroupDataByFileExtensionModel  implements Serializable {
 		String json = gson.toJson(this);
 		
 		return json;
+	}
+
+	public void finish() {
+		fileNumberOfBytesFormated = BytesNumberFormatter.getSize(totalFileNumberOfBytes);
 	}
 }

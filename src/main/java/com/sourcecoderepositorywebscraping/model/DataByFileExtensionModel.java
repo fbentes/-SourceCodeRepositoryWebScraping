@@ -4,6 +4,9 @@ import java.io.Serializable;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 /**
  * Model of soluction with properties lines and bytes of all files in repository.
  * 
@@ -15,13 +18,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class DataByFileExtensionModel  implements Serializable {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -5098158762721667207L;
 	
 	private String fileExtension;
+	
 	private int fileNumberOfLines;
+	
+	@JsonIgnore
 	private float fileNumberOfBytes;
 
 	public DataByFileExtensionModel() {
@@ -57,6 +60,11 @@ public class DataByFileExtensionModel  implements Serializable {
 		this.fileNumberOfBytes += numberOfBytes;
 	}
 
+	@JsonProperty("fileNumberOfBytes")
+	public String getFileNumberOfBytesFormated() {
+		return BytesNumberFormatter.getSize(fileNumberOfBytes);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

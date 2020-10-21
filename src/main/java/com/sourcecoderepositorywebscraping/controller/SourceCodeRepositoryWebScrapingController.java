@@ -19,6 +19,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.sourcecoderepositorywebscraping.model.GroupDataByFileExtensionModel;
 import com.sourcecoderepositorywebscraping.service.SourceCodeRepositoryWebScrapingService;
 import com.sourcecoderepositorywebscraping.util.SourceCodeRepositoryUrlValidator;
+import com.sourcecoderepositorywebscraping.util.exception.WaitTimeToRequestException;
+
+/**
+ * Each requisition will be executed in separete thread.
+ * 
+ * @author fbent
+ *
+ */
 
 @RestController
 public class SourceCodeRepositoryWebScrapingController {
@@ -38,18 +46,21 @@ public class SourceCodeRepositoryWebScrapingController {
 			return SourceCodeRepositoryUrlValidator.getInstance().getMessageResult();
 		}
 		
-		logger.info("repositoryUrl = " + repositoryUrl);
-		
 		CompletableFuture<GroupDataByFileExtensionModel> resultAsync
 		  = CompletableFuture.supplyAsync(() -> {
 			  
-			  return  sourceCodeRepositoryWebScrapingService.getRepositotyUrlContentModel(repositoryUrl);
+			  try {
+				
+				  return  sourceCodeRepositoryWebScrapingService.getRepositotyUrlContentModel(repositoryUrl);
+				  
+			} catch (WaitTimeToRequestException e) {
+				 
+				return e.getGroupDataByFileExtensionModel();
+			}
 		});
 		
 		GroupDataByFileExtensionModel result = resultAsync.get();
 
-    	logger.info(result.toJson());
-    	
 		return ResponseEntity.ok(result);
 	}	
 	

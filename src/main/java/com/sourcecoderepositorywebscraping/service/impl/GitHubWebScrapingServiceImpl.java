@@ -20,11 +20,12 @@ import com.sourcecoderepositorywebscraping.util.FileExtensionByLinkCatcher;
 import com.sourcecoderepositorywebscraping.util.FileLinesCatcher;
 import com.sourcecoderepositorywebscraping.util.FileSizeBytesConverter;
 import com.sourcecoderepositorywebscraping.util.RepositoryHtmlTag;
+import com.sourcecoderepositorywebscraping.util.exception.WaitTimeToRequestException;
 
 /**
- * Responsável pela leitura de uma URL
+ * Reading each requisition concurrently, one by one, using cache, to avoid message: "HTTP 429: Too Many Requests".
  * 
- * @author Fábio Bentes
+ * @author FÃ¡bio Bentes
  * @version 1.0.0.0
  * @since 16/10/2020
  *
@@ -38,7 +39,7 @@ public class GitHubWebScrapingServiceImpl implements SourceCodeRepositoryWebScra
 	private RepositoryHtmlTag repositoryHtmlTag;
 	
 	@Autowired
-	CacheManager cacheManager;
+	private CacheManager cacheManager;
 
 	@Override
 	public void evictSingleCacheValue(String cacheKey) {
@@ -52,85 +53,121 @@ public class GitHubWebScrapingServiceImpl implements SourceCodeRepositoryWebScra
 	
 	@Cacheable(value = "repository", key = "#repositoryUrl")
     @Override
-    public GroupDataByFileExtensionModel getRepositotyUrlContentModel(final String repositoryUrl) { 
+    public GroupDataByFileExtensionModel getRepositotyUrlContentModel(final String repositoryUrl) throws WaitTimeToRequestException { 
 
-		GroupDataByFileExtensionModel groupDataByFileExtensionModel = new GroupDataByFileExtensionModel();
-
-		try {
-		
-			groupDataByFileExtensionModel = prepareRepositotyUrlContentModel(repositoryUrl, groupDataByFileExtensionModel);
-		
-		} catch (IOException e) {
+		synchronized(this) {
 			
-			groupDataByFileExtensionModel.setHttpError(String.format(ConstantsMessages.REPOSITORY_URL_CONTENT_MODEL_ERROR,e.getMessage()));
+			logger.info("repositoryUrl = " + repositoryUrl);
+			
+			GroupDataByFileExtensionModel groupDataByFileExtensionModel = new GroupDataByFileExtensionModel();
+
+			try {
+			
+				groupDataByFileExtensionModel = prepareRepositotyUrlContentModel(repositoryUrl, groupDataByFileExtensionModel);
+			
+			} catch (IOException e) {
+				
+				groupDataByFileExtensionModel.setHttpError(String.format(ConstantsMessages.REPOSITORY_URL_CONTENT_MODEL_ERROR,e.getMessage()));
+				
+			} 
+			
+	    	logger.info(groupDataByFileExtensionModel.toJson());
+	    	
+			return groupDataByFileExtensionModel;
 		}
-		
-		return groupDataByFileExtensionModel;
 	}
 
 	private GroupDataByFileExtensionModel prepareRepositotyUrlContentModel(
 			final String repositoryUrl, 
 			GroupDataByFileExtensionModel groupDataByFileExtensionModel) throws IOException {
 		
-		URL url = new URL(repositoryUrl);
-		BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
+		BufferedReader bufferedReader = null;
+		
+		try {
+			
+			URL url = new URL(repositoryUrl);
+			
+			bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
 
-		String inputLine;
-		
-		boolean catchLines = false;
-		boolean catchBytes = false;
-		
-		int fileNumberLines;
-		float fileNumberSize;
-		
-		String fileExtension = FileExtensionByLinkCatcher.getExtension(repositoryUrl);
-		
-		while ((inputLine = bufferedReader.readLine()) != null) {
+			String inputLine;
 			
-			int pos = inputLine.indexOf(repositoryHtmlTag.getTagSearchLinkSubdirectory());
+			boolean catchLines = false;
+			boolean catchBytes = false;
 			
-			if(pos > -1) {
+			int fileNumberLines;
+			float fileNumberSize;
+			
+			String fileExtension = FileExtensionByLinkCatcher.getExtension(repositoryUrl);
+			
+			while ((inputLine = bufferedReader.readLine()) != null) {
 				
-				String href = "href=";
+				int pos = inputLine.indexOf(repositoryHtmlTag.getTagSearchLinkSubdirectory());
 				
-				int posHref = inputLine.indexOf(href);
-				int endPosHref = inputLine.indexOf("</a>");
-				
-				String macrolink = inputLine.substring(posHref + 7, endPosHref - 1);
-				
-				String linkNotTreatable = "";
-				
-				for(String s :  macrolink.split("/")) {
-					linkNotTreatable += "/" + s;
-				}
-				
-				String linkTreatable = linkNotTreatable.substring(1, linkNotTreatable.indexOf("\">"));			
-				
-				logger.info(repositoryHtmlTag.getSourceCodeRepositoryUrl() + linkTreatable);
-				
-				groupDataByFileExtensionModel = prepareRepositotyUrlContentModel(
-						repositoryHtmlTag.getSourceCodeRepositoryUrl() + linkTreatable,
-						groupDataByFileExtensionModel);
-			}
-			else {
-				
-				pos = inputLine.indexOf(repositoryHtmlTag.getTagSearchLines());
-				
-				if(catchLines && !inputLine.trim().equals("")) {
+				if(pos > -1) {
 					
-					logger.info(inputLine);
+					String href = "href=";
 					
-					if(inputLine.contains("lines")) {
-						
-						fileNumberLines = FileLinesCatcher.getNumberLines(inputLine);
-						
-						DataByFileExtensionModel dataByFileExtensionModel= new DataByFileExtensionModel(fileExtension);
-						dataByFileExtensionModel.addFileNumberOfLines(fileNumberLines);
-						
-						groupDataByFileExtensionModel.addFileNumberOfLines(dataByFileExtensionModel);
+					int posHref = inputLine.indexOf(href);
+					int endPosHref = inputLine.indexOf("</a>");
+					
+					String macrolink = inputLine.substring(posHref + 7, endPosHref - 1);
+					
+					String linkNotTreatable = "";
+					
+					for(String s :  macrolink.split("/")) {
+						linkNotTreatable += "/" + s;
 					}
-					else {
+					
+					String linkTreatable = linkNotTreatable.substring(1, linkNotTreatable.indexOf("\">"));			
+					
+					//logger.info(repositoryHtmlTag.getSourceCodeRepositoryUrl() + linkTreatable);
+					
+					groupDataByFileExtensionModel = prepareRepositotyUrlContentModel(
+							repositoryHtmlTag.getSourceCodeRepositoryUrl() + linkTreatable,
+							groupDataByFileExtensionModel);
+				}
+				else {
+					
+					pos = inputLine.indexOf(repositoryHtmlTag.getTagSearchLines());
+					
+					if(catchLines && !inputLine.trim().equals("")) {
 						
+						//logger.info(inputLine);
+						
+						if(inputLine.contains("lines")) {
+							
+							fileNumberLines = FileLinesCatcher.getNumberLines(inputLine);
+							
+							DataByFileExtensionModel dataByFileExtensionModel= new DataByFileExtensionModel(fileExtension);
+							dataByFileExtensionModel.addFileNumberOfLines(fileNumberLines);
+							
+							groupDataByFileExtensionModel.addFileNumberOfLines(dataByFileExtensionModel);
+						}
+						else {
+							
+							fileNumberSize = FileSizeBytesConverter.getValueInBytes(inputLine);
+							
+							DataByFileExtensionModel dataByFileExtensionModel = new DataByFileExtensionModel(fileExtension);
+							dataByFileExtensionModel.addFileNumberOfBytes(fileNumberSize);
+							
+							groupDataByFileExtensionModel.addFileNumberOfBytes(dataByFileExtensionModel);
+							
+							catchBytes = false;
+						}
+						
+						catchLines = false;
+					}
+
+					if(pos > -1) {
+						catchLines = true;
+					}
+					
+					pos = inputLine.indexOf(repositoryHtmlTag.getTagSearchBytes());
+					
+					if(catchBytes && !inputLine.trim().equals("")) {
+						
+						//logger.info(inputLine);
+
 						fileNumberSize = FileSizeBytesConverter.getValueInBytes(inputLine);
 						
 						DataByFileExtensionModel dataByFileExtensionModel = new DataByFileExtensionModel(fileExtension);
@@ -140,39 +177,22 @@ public class GitHubWebScrapingServiceImpl implements SourceCodeRepositoryWebScra
 						
 						catchBytes = false;
 					}
-					
-					catchLines = false;
-				}
 
-				if(pos > -1) {
-					catchLines = true;
-				}
-				
-				pos = inputLine.indexOf(repositoryHtmlTag.getTagSearchBytes());
-				
-				if(catchBytes && !inputLine.trim().equals("")) {
-					
-					logger.info(inputLine);
-
-					fileNumberSize = FileSizeBytesConverter.getValueInBytes(inputLine);
-					
-					DataByFileExtensionModel dataByFileExtensionModel = new DataByFileExtensionModel(fileExtension);
-					dataByFileExtensionModel.addFileNumberOfBytes(fileNumberSize);
-					
-					groupDataByFileExtensionModel.addFileNumberOfBytes(dataByFileExtensionModel);
-					
-					catchBytes = false;
-				}
-
-				if(pos > -1) {
-					catchBytes = true;
+					if(pos > -1) {
+						catchBytes = true;
+					}
 				}
 			}
+			
+		} finally {
+			
+			if(bufferedReader != null)	
+				bufferedReader.close();
+			
+			groupDataByFileExtensionModel.setRepositoryUrl(repositoryUrl);
+			
+			groupDataByFileExtensionModel.finish();
 		}
-		
-		bufferedReader.close();
-		
-		groupDataByFileExtensionModel.setRepositoryUrl(repositoryUrl);
 		
 		return groupDataByFileExtensionModel;
 	}	
