@@ -1,4 +1,4 @@
-package com.sourcecoderepositorywebscraping.util;
+package com.sourcecoderepositorywebscraping.util.scrapring;
 
 public interface RepositoryHtmlTag {
 

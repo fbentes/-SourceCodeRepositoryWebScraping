@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.google.gson.Gson;
+import com.sourcecoderepositorywebscraping.util.BytesNumberFormatter;
 
 /**
  * Model aggregate all the models that contais count lines and bytes of all files in repository.

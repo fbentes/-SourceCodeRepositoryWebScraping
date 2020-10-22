@@ -1,4 +1,4 @@
-package com.sourcecoderepositorywebscraping.util;
+package com.sourcecoderepositorywebscraping.util.scrapring;
 
 public class FileLinesCatcher {
 
@@ -16,11 +16,5 @@ public class FileLinesCatcher {
 		int numberLines = Integer.parseInt(dataSplited[0].trim());
 		
 		return numberLines;
-	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		System.out.println(getNumberLines("17 lines (17 sloc)"));
 	}
 }

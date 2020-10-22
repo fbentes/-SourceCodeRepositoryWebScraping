@@ -1,4 +1,4 @@
-package com.sourcecoderepositorywebscraping.util;
+package com.sourcecoderepositorywebscraping.util.scrapring;
 
 import org.springframework.stereotype.Component;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
  *
  */
 @Component
-public class ConstantsGitHubHtmlTag implements RepositoryHtmlTag {
+public class RepositoryHtmlTagGitHub implements RepositoryHtmlTag {
 
 	@Override
 	public String getSourceCodeRepositoryUrl() {

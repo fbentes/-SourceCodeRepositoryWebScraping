@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.sourcecoderepositorywebscraping.util.BytesNumberFormatter;
 
 /**
  * Model of soluction with properties lines and bytes of all files in repository.
