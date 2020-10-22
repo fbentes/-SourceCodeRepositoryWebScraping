@@ -9,3 +9,5 @@ https://sourcecodereposwebscraping.herokuapp.com/clearCache?repositoryUrl=https:
 To test response respository request (GET VERB):
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge
 
+Only GitHub repository is implmented, but the implmentation is flexible to any others !
+
