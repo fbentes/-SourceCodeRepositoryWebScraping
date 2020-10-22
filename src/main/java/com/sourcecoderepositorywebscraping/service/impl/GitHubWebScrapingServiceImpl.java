@@ -53,28 +53,26 @@ public class GitHubWebScrapingServiceImpl implements SourceCodeRepositoryWebScra
 	
 	@Cacheable(value = "repository", key = "#repositoryUrl")
     @Override
-    public GroupDataByFileExtensionModel getRepositotyUrlContentModel(final String repositoryUrl) throws WaitTimeToRequestException { 
+    public synchronized GroupDataByFileExtensionModel getRepositotyUrlContentModel(final String repositoryUrl) throws WaitTimeToRequestException { 
 
-		synchronized(this) {
-			
-			logger.info("repositoryUrl = " + repositoryUrl);
-			
-			GroupDataByFileExtensionModel groupDataByFileExtensionModel = new GroupDataByFileExtensionModel();
+		logger.info("repositoryUrl = " + repositoryUrl);
+		
+		GroupDataByFileExtensionModel groupDataByFileExtensionModel = new GroupDataByFileExtensionModel();
 
-			try {
+		try {
+		
+			groupDataByFileExtensionModel = prepareRepositotyUrlContentModel(repositoryUrl, groupDataByFileExtensionModel);
+		
+		} catch (Exception e) {
 			
-				groupDataByFileExtensionModel = prepareRepositotyUrlContentModel(repositoryUrl, groupDataByFileExtensionModel);
+			logger.error(e.getMessage());
 			
-			} catch (IOException e) {
-				
-				groupDataByFileExtensionModel.setHttpError(String.format(ConstantsMessages.REPOSITORY_URL_CONTENT_MODEL_ERROR,e.getMessage()));
-				
-			} 
-			
-	    	logger.info(groupDataByFileExtensionModel.toJson());
-	    	
-			return groupDataByFileExtensionModel;
-		}
+			groupDataByFileExtensionModel.setHttpError(String.format(ConstantsMessages.REPOSITORY_URL_CONTENT_MODEL_ERROR,e.getMessage()));
+		} 
+		
+    	logger.info(groupDataByFileExtensionModel.toJson());
+    	
+		return groupDataByFileExtensionModel;
 	}
 
 	private GroupDataByFileExtensionModel prepareRepositotyUrlContentModel(
@@ -140,6 +138,8 @@ public class GitHubWebScrapingServiceImpl implements SourceCodeRepositoryWebScra
 		catch (HtmlStringContentException e) {
 			
 			groupDataByFileExtensionModel.setHttpError(e.getMessage());
+			
+			logger.error(e.getMessage());
 		}
 		finally {
 			

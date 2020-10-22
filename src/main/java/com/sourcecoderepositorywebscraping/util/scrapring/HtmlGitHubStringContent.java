@@ -20,12 +20,51 @@ public class HtmlGitHubStringContent implements HtmlStringContent {
 
 	Logger logger = LoggerFactory.getLogger(HtmlGitHubStringContent.class);
 
+	private final int timeToWaitOhterRequisition = 20000;  // 10s
+	
 	@Autowired
 	private RepositoryHtmlTag repositoryHtmlTag;
 	
 	public String getSourceCodeRepositoryUrl() {
 		
 		return repositoryHtmlTag.getSourceCodeRepositoryUrl();
+	}
+	
+	private boolean isSucceedConnection(HttpURLConnection urlConnection) throws IOException {
+		
+		int attemptsToConnectIfUrlConnectionReturnDifferentHttpOk = 1	;
+		
+		int responseCode = HttpURLConnection.HTTP_OK;
+		
+		do {
+			
+			urlConnection.connect();
+			
+			responseCode = urlConnection.getResponseCode();
+			
+			if(responseCode != HttpURLConnection.HTTP_OK) {
+				
+				try {
+					
+					if(attemptsToConnectIfUrlConnectionReturnDifferentHttpOk == 3) {
+						break;
+					}
+
+					attemptsToConnectIfUrlConnectionReturnDifferentHttpOk ++;
+					
+					Thread.sleep(timeToWaitOhterRequisition);
+				
+				} catch (InterruptedException e) {
+
+					logger.error(e.getMessage());
+					
+					throw new HtmlStringContentException(e.getMessage());
+				}
+			}
+			
+		} while (responseCode != HttpURLConnection.HTTP_OK);
+		
+        return responseCode == HttpURLConnection.HTTP_OK;
 	}
 	
 	public List<HtmlLineContent> getContentList(String repositoryUrl) {
@@ -39,86 +78,111 @@ public class HtmlGitHubStringContent implements HtmlStringContent {
 			URL url = new URL(repositoryUrl);
 			
 			urlConnection = (HttpURLConnection) url.openConnection();
-			
-			urlConnection.connect();
-			
-			int code = urlConnection.getResponseCode();
-			
-            if (code != HttpURLConnection.HTTP_OK) {
+					
+            if (!isSucceedConnection(urlConnection)) {
             	
             	throw new HtmlStringContentException(urlConnection.getResponseMessage());
             }
-			    
-			try (BufferedReader bufferedReader = new BufferedReader(
-	                new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
-	        
-				String line;
-
-				boolean catchLines = false;
-				boolean catchBytes = false;
-	        	
-				while ((line = bufferedReader.readLine()) != null) {
-		        	
-					if(line.equals("")) {
-						continue;
-					}
-					
-		        	boolean isDirectory = line.indexOf(repositoryHtmlTag.getTagSearchLinkSubdirectory()) > -1;
-		        	
-		        	if(isDirectory) {
-		        		
-		        		htmlLineContentList.add(new HtmlLineContent(line, isDirectory));
-		        	}
-
-		        	boolean hasTagSearchLines = line.indexOf(repositoryHtmlTag.getTagSearchLines()) > -1;
-		        	
-					if(catchLines && !line.trim().equals("")) {
-						
-						if(line.contains("lines")) {
-							
-			        		HtmlLineContent lineContent = new HtmlLineContent(line, true, false);
-			        		htmlLineContentList.add(lineContent);
-			        		
-			        		logger.info("line = " + lineContent.toString());
-						}
-						else {
-							
-			        		HtmlLineContent lineContent = new HtmlLineContent(line, false, true);
-			        		htmlLineContentList.add(lineContent);
-							
-			        		logger.info("line = " + lineContent.toString());
-
-			        		catchBytes = false;
-						}
-						
-						catchLines = false;
-					}
-
-					if(hasTagSearchLines) {
-						catchLines = true;
-					}
-
-					boolean hasTagSearchBytes = line.indexOf(repositoryHtmlTag.getTagSearchBytes()) > -1;
-
-					if(catchBytes && !line.trim().equals("")) {
-						
-		        		HtmlLineContent lineContent = new HtmlLineContent(line, false, true);
-		        		htmlLineContentList.add(lineContent);
-						
-		        		logger.info("line = " + lineContent.toString());
-
-		        		catchBytes = false;
-					}
-
-					if(hasTagSearchBytes) {
-						catchBytes = true;
-					}		        	
-		        }
-			} 
 			
+            int attemptsToConnectIfThrowsTooManyRequests = 1;
+			
+            do {
+            	
+                try (BufferedReader bufferedReader = new BufferedReader(
+    	                new InputStreamReader(urlConnection.getInputStream(), "UTF-8"))) {
+    	        
+    				String line;
+
+    				boolean isCatchNumberFileLines = false;
+    				boolean isCatchNumberFileBytes = false;
+    	        	
+    				while ((line = bufferedReader.readLine()) != null) {
+    		        	
+    					if(line.equals("")) {
+    						continue;
+    					}
+    					
+    		        	boolean isLinkToSubDirectory = line.indexOf(repositoryHtmlTag.getTagSearchLinkSubdirectory()) > -1;
+    		        	
+    		        	if(isLinkToSubDirectory) {
+    		        		
+    		        		htmlLineContentList.add(new HtmlLineContent(line, isLinkToSubDirectory));
+    		        	}
+
+    		        	boolean hasTagSearchLines = line.indexOf(repositoryHtmlTag.getTagSearchLines()) > -1;
+    		        	
+    					if(isCatchNumberFileLines && !line.trim().equals("")) {
+    						
+    						if(line.contains("lines")) {
+    							
+    			        		HtmlLineContent lineContent = new HtmlLineContent(line, true, false);
+    			        		htmlLineContentList.add(lineContent);
+    						}
+    						else {
+    							
+    			        		HtmlLineContent lineContent = new HtmlLineContent(line, false, true);
+    			        		htmlLineContentList.add(lineContent);
+    							
+    			        		isCatchNumberFileBytes = false;
+    						}
+    						
+    						isCatchNumberFileLines = false;
+    					}
+
+    					if(hasTagSearchLines) {
+    						isCatchNumberFileLines = true;
+    					}
+
+    					boolean hasTagSearchBytes = line.indexOf(repositoryHtmlTag.getTagSearchBytes()) > -1;
+
+    					if(isCatchNumberFileBytes && !line.trim().equals("")) {
+    						
+    		        		HtmlLineContent lineContent = new HtmlLineContent(line, false, true);
+    		        		htmlLineContentList.add(lineContent);
+    						
+    		        		isCatchNumberFileBytes = false;
+    					}
+
+    					if(hasTagSearchBytes) {
+    						isCatchNumberFileBytes = true;
+    					}		        	
+    		        }
+    				
+    				attemptsToConnectIfThrowsTooManyRequests = 4;
+    			}
+                catch (Exception e) {
+                	
+        			if(e.getMessage().toLowerCase().contains("too many requests")) {
+
+        				try {
+							
+        					attemptsToConnectIfThrowsTooManyRequests ++;
+        					
+        					Thread.sleep(timeToWaitOhterRequisition);
+							
+						} catch (InterruptedException e1) {
+							
+							logger.error(e1.getMessage());
+							
+							throw new HtmlStringContentException(e1.getMessage());
+						}
+        			}
+        			else {
+        				logger.error(e.getMessage());
+        				
+        				throw new HtmlStringContentException(e.getMessage());
+        			}
+                }
+
+            } while(attemptsToConnectIfThrowsTooManyRequests <= 3);
+		
 		} catch(IOException | HtmlStringContentException e) {
 			
-			logger.error("Could not connect to " + repositoryUrl, e);
+			if(e instanceof IOException) {
+				logger.error("Could not connect to " + repositoryUrl, e);
+			} else {
+				logger.error(e.getMessage());
+			}
 
 			throw new HtmlStringContentException(e.getMessage());
 		
