@@ -34,7 +34,7 @@ public class SourceCodeRepositoryWebScrapingController {
 	Logger logger = LoggerFactory.getLogger(SourceCodeRepositoryWebScrapingController.class);
 	
 	@Autowired
-	private SourceCodeRepositoryWebScrapingService sourceCodeRepositoryWebScrapingService;
+    private SourceCodeRepositoryWebScrapingService sourceCodeRepositoryWebScrapingService;
 	
 	@CrossOrigin
 	@GetMapping("/fetchDataRepository")
@@ -46,6 +46,9 @@ public class SourceCodeRepositoryWebScrapingController {
 			return SourceCodeRepositoryUrlValidator.getInstance().getMessageResult();
 		}
 		
+		GroupDataByFileExtensionModel result = sourceCodeRepositoryWebScrapingService.getRepositotyUrlContentModel(repositoryUrl);
+		
+		/*
 		CompletableFuture<GroupDataByFileExtensionModel> resultAsync
 		  = CompletableFuture.supplyAsync(() -> {
 			  
@@ -60,7 +63,8 @@ public class SourceCodeRepositoryWebScrapingController {
 		});
 		
 		GroupDataByFileExtensionModel result = resultAsync.get();
-
+		*/
+		
 		return ResponseEntity.ok(result);
 	}	
 	
