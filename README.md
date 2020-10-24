@@ -13,7 +13,7 @@
 > Note for analysis of sources:
 > The classes responsible for the request Client Socket and response Server Socket are, respectively, ** com.imdb.query.client.impl.IMDbClientSocketImpl ** and ** com.imdb.query.server.impl.IMDbClientHandler **.
 
-[SourceCodeRepositoryWebScraping Javadoc](https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject/javadoc/com/imdb/query)
+[SourceCodeRepositoryWebScraping Javadoc](https://github.com/fbentes/SourceCodeRepositoryWebScraping/tree/main/doc/com/sourcecoderepositorywebscraping)
 
 ### Example to test the solution:
 
