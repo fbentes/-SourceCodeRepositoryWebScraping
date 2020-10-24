@@ -8,12 +8,12 @@
 
 ### Technical documentation:
 
-[SourceCodeRepositoryWebScraping Lucidchart Package Diagram] (https://app.lucidchart.com/lucidchart/51efb0ec-ce7f-4f24-bda9-2799064d1543/view?page=0_0#?folder_id=home&browser=icon)
+[SourceCodeRepositoryWebScraping Lucidchart Package Diagram](https://app.lucidchart.com/lucidchart/51efb0ec-ce7f-4f24-bda9-2799064d1543/view?page=0_0#?folder_id=home&browser=icon)
 
 > Note for analysis of sources:
 > The classes responsible for the request Client Socket and response Server Socket are, respectively, ** com.imdb.query.client.impl.IMDbClientSocketImpl ** and ** com.imdb.query.server.impl.IMDbClientHandler **.
 
-[SourceCodeRepositoryWebScraping Javadoc] (https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject/javadoc/com/imdb/query)
+[SourceCodeRepositoryWebScraping Javadoc](https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject/javadoc/com/imdb/query)
 
 ### Example to test the solution:
 
