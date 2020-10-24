@@ -1,5 +1,5 @@
 # SourceCodeRepositoryWebScraping Project
-## Java solution with Spring Boot: Data retrieved from Githubwebsite by using web scraping techniques.
+## Java solution with Spring Boot: Data retrieved from GitHub website by using web scraping techniques.
 ### Development environment 
 
 - **Windows 10 Home**
