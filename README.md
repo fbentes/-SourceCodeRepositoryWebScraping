@@ -32,5 +32,5 @@ https://sourcecodereposwebscraping.herokuapp.com/clearAllCache
 To clear a especific repository (**POST VERB**):
 https://sourcecodereposwebscraping.herokuapp.com/clearCache?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject
 
-**Note: Only to the GitHub repository was implmented, but the implmentation is flexible and extensible to any others using Strategy design patterns !**
+**Note: Only to the GitHub repository was implmented, but the implmentation is flexible and extensible using Strategy design patterns !**
 
