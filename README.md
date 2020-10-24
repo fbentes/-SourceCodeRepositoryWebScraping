@@ -17,7 +17,7 @@
 
 ### Example to test the solution:
 
-To test response respository request (**GET VERB**):
+To test responses of respository requests (**GET VERB**):
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge
 
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping
