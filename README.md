@@ -1,4 +1,4 @@
-# IMDbQueryProject
+# SourceCodeRepositoryWebScraping Project
 ## Java solution with Spring Boot to scraping html repository in GitHub.
 ### Development environment 
 
