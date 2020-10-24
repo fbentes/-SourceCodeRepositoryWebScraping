@@ -4,7 +4,7 @@
 
 - **Windows 10 Home**
 - [**Spring Tools 4 for Eclipse Download**](https://download.springsource.com/release/STS4/4.8.0.RELEASE/dist/e4.17/spring-tool-suite-4-4.8.0.RELEASE-e4.17.0-win32.win32.x86_64.self-extracting.jar)
-- [**RedHat Java OpenJDK 8 Download**](https://developers.redhat.com/download-manager/file/java-1.8.0-openjdk-1.8.0.265-3.b01.redhat.windows.x86_64.msi) (download only if you do not have, ** _ at least _ **, a JDK 8 installed, either from RedHat, Oracle or another vendor.).
+- [**RedHat Java OpenJDK 8 Download**](https://developers.redhat.com/download-manager/file/java-1.8.0-openjdk-1.8.0.265-3.b01.redhat.windows.x86_64.msi) (download only if you do not have, **_at least_**, a JDK 8 installed, either from RedHat, Oracle or another vendor.).
 
 Example to test:
 
