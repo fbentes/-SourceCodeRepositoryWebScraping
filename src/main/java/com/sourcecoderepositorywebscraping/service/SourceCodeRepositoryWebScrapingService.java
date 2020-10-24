@@ -1,14 +1,14 @@
 package com.sourcecoderepositorywebscraping.service;
 
+import com.sourcecoderepositorywebscraping.exception.WaitTimeExccededToRequestException;
 import com.sourcecoderepositorywebscraping.model.GroupDataByFileExtensionModel;
-import com.sourcecoderepositorywebscraping.util.exception.WaitTimeToRequestException;
 
 public interface SourceCodeRepositoryWebScrapingService {
 
-	void evictSingleCacheValue(String cacheKey);
+	void clearCache(String cacheKey);
 	
-	void evictAllCacheValues();
+	void clearAllCache();
 	
 	GroupDataByFileExtensionModel getRepositotyUrlContentModel(final String repositoryUrl)
-	  throws WaitTimeToRequestException;
+	  throws WaitTimeExccededToRequestException;
 }

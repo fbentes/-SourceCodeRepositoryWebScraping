@@ -7,11 +7,12 @@ import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
+import com.sourcecoderepositorywebscraping.core.HtmlStringParserContentStrategy;
+import com.sourcecoderepositorywebscraping.core.WebScrapingServiceThreadExecutor;
+import com.sourcecoderepositorywebscraping.exception.HtmlStringContentException;
+import com.sourcecoderepositorywebscraping.exception.WaitTimeExccededToRequestException;
 import com.sourcecoderepositorywebscraping.model.GroupDataByFileExtensionModel;
 import com.sourcecoderepositorywebscraping.service.SourceCodeRepositoryWebScrapingService;
-import com.sourcecoderepositorywebscraping.util.exception.HtmlStringContentException;
-import com.sourcecoderepositorywebscraping.util.exception.WaitTimeToRequestException;
-import com.sourcecoderepositorywebscraping.util.scrapring.HtmlStringContent;
 
 /**
  * Reading each requisition concurrently, one by one, using cache, to avoid message: "HTTP 429: Too Many Requests".
@@ -27,24 +28,24 @@ public class GitHubWebScrapingServiceImpl implements SourceCodeRepositoryWebScra
 	private static Logger logger = LoggerFactory.getLogger(GitHubWebScrapingServiceImpl.class);
 	
 	@Autowired
-	private HtmlStringContent htmlGitHubStringContent;
+	private HtmlStringParserContentStrategy htmlGitHubStringContent;
 	
 	@Autowired
 	private CacheManager cacheManager;
 
 	@Override
-	public void evictSingleCacheValue(String cacheKey) {
+	public void clearCache(String cacheKey) {
 	    cacheManager.getCache("repository").evict(cacheKey);
 	}
 	
 	@Override
-	public void evictAllCacheValues() {
+	public void clearAllCache() {
 	    cacheManager.getCache("repository").clear();
 	}		
 	
 	@Cacheable(value = "repository", key = "#repositoryUrl")
     @Override
-    public synchronized GroupDataByFileExtensionModel getRepositotyUrlContentModel(final String repositoryUrl) throws WaitTimeToRequestException { 
+    public synchronized GroupDataByFileExtensionModel getRepositotyUrlContentModel(final String repositoryUrl) throws WaitTimeExccededToRequestException { 
 
 		WebScrapingServiceThreadExecutor webScrapingServiceThreadExecutor = 
 				new WebScrapingServiceThreadExecutor(repositoryUrl, htmlGitHubStringContent);

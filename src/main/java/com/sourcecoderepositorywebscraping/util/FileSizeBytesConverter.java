@@ -29,21 +29,4 @@ public class FileSizeBytesConverter {
 		
 		return value;
 	}
-	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-		Float v = getValueInBytes("1.05 MB");
-		
-		System.out.println(v);
-
-		v = getValueInBytes("264 KB");
-		
-		System.out.println(v);
-
-		v = getValueInBytes("636 Bytes");
-		
-		System.out.println(v);
-	}
-
 }

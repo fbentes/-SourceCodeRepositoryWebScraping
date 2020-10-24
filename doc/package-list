@@ -1,0 +1,9 @@
+com.sourcecoderepositorywebscraping
+com.sourcecoderepositorywebscraping.controller
+com.sourcecoderepositorywebscraping.core
+com.sourcecoderepositorywebscraping.exception
+com.sourcecoderepositorywebscraping.model
+com.sourcecoderepositorywebscraping.service
+com.sourcecoderepositorywebscraping.service.impl
+com.sourcecoderepositorywebscraping.util
+com.sourcecoderepositorywebscraping.util.concurrency

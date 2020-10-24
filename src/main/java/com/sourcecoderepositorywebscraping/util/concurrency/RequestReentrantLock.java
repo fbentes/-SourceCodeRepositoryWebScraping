@@ -8,13 +8,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.sourcecoderepositorywebscraping.util.exception.WaitTimeToRequestException;
+import com.sourcecoderepositorywebscraping.exception.WaitTimeExccededToRequestException;
 
 @Component
 @Deprecated
 public class RequestReentrantLock implements RequestConcurrency {
 
-	Logger logger = LoggerFactory.getLogger(RequestReentrantLock.class);
+	private static Logger logger = LoggerFactory.getLogger(RequestReentrantLock.class);
 
 	private int totalSilmultaneousRequisitionPermissioned = 1;
 	
@@ -58,7 +58,7 @@ public class RequestReentrantLock implements RequestConcurrency {
         }
 	}
 	
-	public void waitUntilFreeSpaceInTheQueue() throws WaitTimeToRequestException {
+	public void waitUntilFreeSpaceInTheQueue() throws WaitTimeExccededToRequestException {
 		
 		boolean logged = false;
 		
@@ -78,7 +78,7 @@ public class RequestReentrantLock implements RequestConcurrency {
 			Duration interval = Duration.between(startTime, Instant.now());
 			
 			if(interval.getSeconds() >= 1000) {
-				throw new WaitTimeToRequestException();
+				throw new WaitTimeExccededToRequestException();
 			}
 		}		
 	}	
