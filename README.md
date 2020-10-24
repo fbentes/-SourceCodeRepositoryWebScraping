@@ -6,9 +6,18 @@
 - [**Spring Tools 4 for Eclipse Download**](https://download.springsource.com/release/STS4/4.8.0.RELEASE/dist/e4.17/spring-tool-suite-4-4.8.0.RELEASE-e4.17.0-win32.win32.x86_64.self-extracting.jar)
 - [**RedHat Java OpenJDK 8 Download**](https://developers.redhat.com/download-manager/file/java-1.8.0-openjdk-1.8.0.265-3.b01.redhat.windows.x86_64.msi) (download only if you do not have, **_at least_**, a JDK 8 installed, either from RedHat, Oracle or another vendor.).
 
-Example to test:
+### Technical documentation:
 
-To test response respository request (GET VERB):
+[SourceCodeRepositoryWebScraping Lucidchart Package Diagram] (https://app.lucidchart.com/lucidchart/51efb0ec-ce7f-4f24-bda9-2799064d1543/view?page=0_0#?folder_id=home&browser=icon)
+
+> Note for analysis of sources:
+> The classes responsible for the request Client Socket and response Server Socket are, respectively, ** com.imdb.query.client.impl.IMDbClientSocketImpl ** and ** com.imdb.query.server.impl.IMDbClientHandler **.
+
+[SourceCodeRepositoryWebScraping Javadoc] (https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject/javadoc/com/imdb/query)
+
+### Example to test the solution:
+
+To test response respository request (**GET VERB**):
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge
 
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping
@@ -17,7 +26,7 @@ https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryU
 
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/microtef-hire-me
 
-To clear all repositorires caches (POST VERB):
+To clear all repositorires caches (**POST VERB**):
 https://sourcecodereposwebscraping.herokuapp.com/clearAllCache
 
 To clear a especific repository (POST VERB):
