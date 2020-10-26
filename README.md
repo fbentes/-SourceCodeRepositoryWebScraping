@@ -18,6 +18,8 @@
 ### Example to test the solution:
 
 To test responses of respository requests (**GET VERB**):
+
+####From Heroku:
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge
 
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping
@@ -25,6 +27,16 @@ https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryU
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/FrameworkWebDesk
 
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/microtef-hire-me
+
+####From localhost:
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge
+
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping
+
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/FrameworkWebDesk
+
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/microtef-hire-me
+
 
 To clear all repositorires caches (**POST VERB**):
 https://sourcecodereposwebscraping.herokuapp.com/clearAllCache
