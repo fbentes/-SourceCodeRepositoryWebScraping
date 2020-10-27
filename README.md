@@ -1,5 +1,5 @@
 # SourceCodeRepositoryWebScraping Project
-## Java solution with Spring Boot to scraping html repository in GitHub.
+## Java solution with Spring Boot: Data retrieved from GitHub website by using web scraping techniques.
 ### Development environment 
 
 - **Windows 10 Home**
@@ -13,11 +13,13 @@
 > Note for analysis of sources:
 > The classes responsible for the request Client Socket and response Server Socket are, respectively, ** com.imdb.query.client.impl.IMDbClientSocketImpl ** and ** com.imdb.query.server.impl.IMDbClientHandler **.
 
-[SourceCodeRepositoryWebScraping Javadoc](https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject/javadoc/com/imdb/query)
+[SourceCodeRepositoryWebScraping Javadoc](https://github.com/fbentes/SourceCodeRepositoryWebScraping/tree/main/doc/com/sourcecoderepositorywebscraping)
 
 ### Example to test the solution:
 
-To test response respository request (**GET VERB**):
+To test responses of respository requests (**GET VERB**):
+
+####From Heroku:
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge
 
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping
@@ -26,11 +28,21 @@ https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryU
 
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/microtef-hire-me
 
+####From localhost:
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge
+
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping
+
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/FrameworkWebDesk
+
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/microtef-hire-me
+
+
 To clear all repositorires caches (**POST VERB**):
 https://sourcecodereposwebscraping.herokuapp.com/clearAllCache
 
-To clear a especific repository (POST VERB):
+To clear a especific repository (**POST VERB**):
 https://sourcecodereposwebscraping.herokuapp.com/clearCache?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject
 
-Only GitHub repository is implmented, but the implmentation is flexible to any others using Strategy design patterns !
+**Note: Only to the GitHub repository was implmented, but the implmentation is flexible and extensible using Strategy design patterns !**
 
