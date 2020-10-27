@@ -17,9 +17,10 @@
 
 ### Example to test the solution:
 
+**From Heroku:**
+
 To test responses of respository requests (**GET VERB**):
 
-####From Heroku:
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge
 
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping
@@ -28,7 +29,14 @@ https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryU
 
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/microtef-hire-me
 
-####From localhost:
+To clear all repositorires caches (**POST VERB**):
+https://sourcecodereposwebscraping.herokuapp.com/clearAllCache
+
+To clear a especific repository (**POST VERB**):
+https://sourcecodereposwebscraping.herokuapp.com/clearCache?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject
+
+**From localhost:**
+
 http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge
 
 http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping
@@ -37,12 +45,11 @@ http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbent
 
 http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/microtef-hire-me
 
-
 To clear all repositorires caches (**POST VERB**):
-https://sourcecodereposwebscraping.herokuapp.com/clearAllCache
+https://localhost:9091/clearAllCache
 
 To clear a especific repository (**POST VERB**):
-https://sourcecodereposwebscraping.herokuapp.com/clearCache?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject
+https://localhost:9091/clearCache?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject
 
 **Note: Only to the GitHub repository was implmented, but the implmentation is flexible and extensible using Strategy design patterns !**
 
