@@ -19,7 +19,7 @@
 
 **From Heroku:**
 
-To test responses of respository requests (**GET VERB**):
+Call all repositoriries to return lines and bytes of filaes by extension (**GET verb**):
 
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge
 
@@ -27,15 +27,15 @@ https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryU
 
 https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/FrameworkWebDesk
 
-https://sourcecodereposwebscraping.herokuapp.com/fetchDataRepository?repositoryUrl=https://github.com/fbentes/microtef-hire-me
-
-To clear all repositorires caches (**POST VERB**):
+To clear all repositorires caches (**POST verb**):
 https://sourcecodereposwebscraping.herokuapp.com/clearAllCache
 
-To clear a especific repository (**POST VERB**):
+To clear a especific repository (**POST verb**):
 https://sourcecodereposwebscraping.herokuapp.com/clearCache?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject
 
 **From localhost:**
+
+Call all repositoriries to return lines and bytes of filaes by extension (**GET verb**):
 
 http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge
 
@@ -43,13 +43,10 @@ http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbent
 
 http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/FrameworkWebDesk
 
-http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/microtef-hire-me
-
-To clear all repositorires caches (**POST VERB**):
+To clear all repositorires caches (**POST verb**):
 https://localhost:9091/clearAllCache
 
-To clear a especific repository (**POST VERB**):
+To clear a especific repository (**POST verb**):
 https://localhost:9091/clearCache?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject
 
 **Note: Only to the GitHub repository was implmented, but the implmentation is flexible and extensible using Strategy design patterns !**
-
