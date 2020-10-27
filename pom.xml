@@ -14,6 +14,7 @@
 	<name>SourceCodeWebRepositoryWebScraping</name>
 	<description>Project Java to count file numbers and bytes of all files in repository.</description>
 
+	<!-- 
 	<licenses>
 	  <license>
 	    <name>MIT License</name>
@@ -39,18 +40,19 @@
 	      <organization>BenteSoft</organization>
 	    </developer>
     </developers>
-  
+  -->
 	<properties>
 		<java.version>1.8</java.version>
 	</properties>
 
 	<dependencies>
 
+<!-- 
 		<dependency>
 		    <groupId>org.springframework</groupId>
 		    <artifactId>spring-beans</artifactId>
 		</dependency>
-    
+ -->   
        <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
@@ -119,6 +121,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<!-- 
 			<plugin>
 			    <groupId>com.spotify</groupId>
 			    <artifactId>dockerfile-maven-plugin</artifactId>
@@ -162,6 +165,7 @@
 		        </execution>
 		      </executions>
 		    </plugin>
+		    -->
 		    <!-- 	
 		    <plugin>
 		      <groupId>org.apache.maven.plugins</groupId>
