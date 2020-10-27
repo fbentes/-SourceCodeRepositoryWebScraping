@@ -28,7 +28,7 @@ public class HtmlStringParserContentGitHub implements HtmlStringParserContentStr
 
 	private static Logger logger = LoggerFactory.getLogger(HtmlStringParserContentGitHub.class);
 
-	private final int timeToWaitOhterRequisition = 20000;  // 20s
+	private final int timeToWaitOhterRequisition = 50000;  // 50s
 	
 	@Autowired
 	private RepositoryHtmlTagStrategy repositoryHtmlTagStrategy;
