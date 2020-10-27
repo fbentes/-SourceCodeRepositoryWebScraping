@@ -13,30 +13,44 @@ import com.sourcecoderepositorywebscraping.util.ConstantsMessages;
 import com.sourcecoderepositorywebscraping.util.FileSizeBytesConverter;
 
 /**
- * Each request is processed in separate thread to parsing the url and return json.
+ * Each request is processed in separate thread to parsing the url repository and return json.
  * 
  * @author Fábio Bentes
  * @version 1.0.0.0
  * @since 22/10/2020
  *
  */
-public class WebScrapingServiceThreadExecutor extends Thread {
+public class WebScrapingThreadExecutor extends Thread {
 
-	private static Logger logger = LoggerFactory.getLogger(WebScrapingServiceThreadExecutor.class);
-	
-	private String repositoryUrl;
+	private static Logger logger = LoggerFactory.getLogger(WebScrapingThreadExecutor.class);
 	
 	private HtmlStringParserContentStrategy htmlGitHubStringContent;
 	
+	private GroupDataByFileExtensionModelCache groupDataByFileExtensionModelCache;
+
+	private String repositoryUrl;
+	
 	private GroupDataByFileExtensionModel groupDataByFileExtensionModel;
 	
-	public WebScrapingServiceThreadExecutor(String repositoryUrl, HtmlStringParserContentStrategy htmlGitHubStringContent) {
+	public WebScrapingThreadExecutor(String repositoryUrl) {
 		
 		this.repositoryUrl = repositoryUrl;
+	}
+
+	public void setHtmlGitHubStringContent(HtmlStringParserContentStrategy htmlGitHubStringContent) {
 		this.htmlGitHubStringContent = htmlGitHubStringContent;
 	}
-	
-    public GroupDataByFileExtensionModel getGroupDataByFileExtensionModel() {
+
+	public void setGroupDataByFileExtensionModelCache(
+			GroupDataByFileExtensionModelCache groupDataByFileExtensionModelCache) {
+		this.groupDataByFileExtensionModelCache = groupDataByFileExtensionModelCache;
+	}
+
+	public void setRepositoryUrl(String repositoryUrl) {
+		this.repositoryUrl = repositoryUrl;
+	}
+
+	public GroupDataByFileExtensionModel getGroupDataByFileExtensionModel() {
 		return groupDataByFileExtensionModel;
 	}
 
@@ -45,11 +59,18 @@ public class WebScrapingServiceThreadExecutor extends Thread {
 		
     	 synchronized(this) {
     	 
-    			groupDataByFileExtensionModel = new GroupDataByFileExtensionModel();
-
+    		 	boolean isFetchedFromCache = false;
+    		 	
     			try {
-    			
-    				groupDataByFileExtensionModel = getRepositotyUrlContentModel(repositoryUrl, groupDataByFileExtensionModel);
+    				
+    				groupDataByFileExtensionModel = groupDataByFileExtensionModelCache.getItem(repositoryUrl);
+    				
+    				isFetchedFromCache = groupDataByFileExtensionModel != null;
+    				
+    				if(!isFetchedFromCache) {
+        				
+    					groupDataByFileExtensionModel = getRepositotyUrlContentModel(repositoryUrl, new GroupDataByFileExtensionModel());
+    				}
     			
     			} catch (Exception e) {
     				
@@ -59,7 +80,11 @@ public class WebScrapingServiceThreadExecutor extends Thread {
 
     			} finally {
     				
-        	    	notify();
+    		    	 if(!isFetchedFromCache) {
+    		 	    	groupDataByFileExtensionModelCache.addItem(repositoryUrl, groupDataByFileExtensionModel);
+    		     	}
+
+    		    	 notifyAll();    		    	 
     			}
     			
     	    	logger.info(groupDataByFileExtensionModel.toJson());
@@ -74,6 +99,7 @@ public class WebScrapingServiceThreadExecutor extends Thread {
 	 * @return
 	 * @throws IOException
 	 */
+	//@Cacheable(value = "repository", key = "#repositoryUrl")
 	private GroupDataByFileExtensionModel getRepositotyUrlContentModel(
 			final String repositoryUrl, 
 			GroupDataByFileExtensionModel groupDataByFileExtensionModel) throws IOException {

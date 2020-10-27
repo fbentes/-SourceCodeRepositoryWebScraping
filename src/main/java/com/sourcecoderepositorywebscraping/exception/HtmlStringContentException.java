@@ -3,7 +3,7 @@ package com.sourcecoderepositorywebscraping.exception;
 import com.sourcecoderepositorywebscraping.model.GroupDataByFileExtensionModel;
 
 /**
- * Exception to any throws by any object involved with the request on parser html repository.
+ * Exception that throws by all object involved with the request on parser html repository.
  * 
  * @author Fábio Bentes
  * @version 1.0.0.0

@@ -190,13 +190,13 @@ public class HtmlStringParserContentGitHub implements HtmlStringParserContentStr
 							
 						} catch (InterruptedException e1) {
 							
-							logger.error(e1.getMessage());
+							logger.error("e1: " + e1.getMessage());
 							
 							throw new HtmlStringContentException(e1.getMessage());
 						}
         			}
         			else {
-        				logger.error(e.getMessage());
+        				logger.error("e2: " + e.getMessage());
         				
         				throw new HtmlStringContentException(e.getMessage());
         			}

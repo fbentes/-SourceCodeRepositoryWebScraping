@@ -5,7 +5,7 @@ import com.sourcecoderepositorywebscraping.model.GroupDataByFileExtensionModel;
 
 public interface SourceCodeRepositoryWebScrapingService {
 
-	void clearCache(String cacheKey);
+	void clearCache(String repositoryUrl);
 	
 	void clearAllCache();
 	

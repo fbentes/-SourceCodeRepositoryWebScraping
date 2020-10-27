@@ -1,4 +1,5 @@
 com.sourcecoderepositorywebscraping
+com.sourcecoderepositorywebscraping.config
 com.sourcecoderepositorywebscraping.controller
 com.sourcecoderepositorywebscraping.core
 com.sourcecoderepositorywebscraping.exception

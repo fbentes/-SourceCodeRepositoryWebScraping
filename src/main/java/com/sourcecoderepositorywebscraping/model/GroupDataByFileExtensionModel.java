@@ -16,14 +16,12 @@ import com.sourcecoderepositorywebscraping.util.BytesNumberFormatter;
 /**
  * Model aggregate all the models that contais count lines and bytes of all files in repository.
  * 
- * @author fbent
- *
- * @author fbent
+ * @author Fábio Bentes
  * @version 1.0.0.0
  * @since 19/10/2020
  */
 @Component
-@JsonPropertyOrder({ "repositoryUrl", "totalFileNumberOfLines", "totalFileNumberOfBytes", "httpError", "dataByFileExtensionModelList" })
+@JsonPropertyOrder({ "durationProcessingInSeconds", "repositoryUrl", "totalFileNumberOfLines", "totalFileNumberOfBytes", "httpError", "dataByFileExtensionModelList" })
 public class GroupDataByFileExtensionModel  implements Serializable {
 
 	private static final long serialVersionUID = -3410669692176028544L;
