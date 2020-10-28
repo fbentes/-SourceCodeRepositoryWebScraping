@@ -53,7 +53,7 @@ https://localhost:9091/clearAllCache
 To clear a especific repository (**POST verb**):
 https://localhost:9091/clearCache?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject
 
-**Note: Heroku has limitations of requests on free plan, and because that it block application when multiple requests is sended even in long time. On localhost works fine with multiples requests providing cache by repository argument, concurrently, example: 
+**Note: Heroku has limitations of requests on free plan, and because that it block application when multiple requests is sended even in long time. On localhost works fine with multiples requests providing cache by repository argument, concurrently, example:** 
 
 http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge  (request 1)
 http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge  (request 2)
