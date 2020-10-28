@@ -73,5 +73,5 @@ http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbent
 http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/FrameworkWebDesk (request 11)
 http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/FrameworkWebDesk (request 12)
 
-**Only one parsing all files is executed by time to avoid error HTTP 429, independetly of your cache is updated, and next requests the same repository fecthing by your cache.
+**Only one parsing all files is executed by time to avoid error HTTP 429 and next requests the same repository fecthing by your cache.
 If error HTTP 429 is throws, the thread wait sleep of 50s to next attempt read stream for 3 times. Otherwise a error too many requests is shown to client.**
