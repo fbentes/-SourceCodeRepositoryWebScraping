@@ -53,4 +53,25 @@ https://localhost:9091/clearAllCache
 To clear a especific repository (**POST verb**):
 https://localhost:9091/clearCache?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge/tree/master/IMDbQueryProject
 
-**Note: Heroku has limitations of requests on free plan, and because that it block application when multiple requests is sended even in long time. On localhost works fine with multiples requests providing cache by repository argument, concurrently !**
+**Note: Heroku has limitations of requests on free plan, and because that it block application when multiple requests is sended even in long time. On localhost works fine with multiples requests providing cache by repository argument, concurrently, example: 
+
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge  (request 1)
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge  (request 2)
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge  (request 3) 
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/EmitesJavaJobApplicationChallenge  (request 4) 
+
+**Above, the first request (request 1) lock until finish parsing all files and update your cache while the all others (request 1..12) wait. When your cache is update, request 1 unlock, and requests 2, 3, 4 returns fecthing data from cache of the repository, immediatly to repositoryUrl = https://github.com/fbentes/EmitesJavaJobApplicationChallenge.
+As soon as the unlock is done, the next thread lock all others threads to parsing all files to next repository (ex.: https://github.com/fbentes/SourceCodeRepositoryWebScraping). When finish, unlocks all treads and returns to next steps.**
+
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping (request 5)
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping (request 6)
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping (request 7)
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/SourceCodeRepositoryWebScraping (request 8)
+
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/FrameworkWebDesk (request 9)
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/FrameworkWebDesk (request 10)
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/FrameworkWebDesk (request 11)
+http://localhost:9091/fetchDataRepository?repositoryUrl=https://github.com/fbentes/FrameworkWebDesk (request 12)
+
+**Only one parsing all files is executed by time to avoid error HTTP 429, independetly of your cache is updated, and follow requests the same repository fecthing by your cache.
+If error HTTP 429 is throws, the thread wait sleep of 50s to next attempt read stream for 3 times. Otherwise a error too many requests is shown to client.**
