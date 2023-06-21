@@ -1,10 +1,23 @@
+
 # SourceCodeRepositoryWebScraping Project
+
+
+# Requisito: 
+O componente recebe uma url de um repositório Git e retorna um Json totalizando as linhas e bytes de todos os arquivos, agrupando por extensão de arquivo. Milhares ou milhões de requisições simultâneas devem ser atendidas sem disparo do erro HTTP 429 – Too Many Request e sem timeout. Todas as requisições devem ser atendidas, independentemente do tempo inicial de requisição, mas as requisições subsequentes devem responder em tempo imediato.
+
+# Solução: 
+Através de uma REST API pulicada no Heroku, cada URL requisitada usa uma Thread única e as demais requisições para a mesma URL aguardam até que a primeira requisição desbloqueie após o cache ser preenchido. Assim, se 100 requisições forem feitas, a primeira fará o parsing nos arquivos da URL, demorará o tempo necessário e as 99 requisições subsequentes buscam do cache de imediato. Se for disparado HTTP 429, o componente fica num delay com 3 tentativas até que o servidor não “pense” que há uma invasão indevida. Se mesmo assim não resolver, aí o usuário terá que tentar num outro momento a requisição.
+
+
+
 ## Java solution with Spring Boot: Data retrieved from GitHub website by using web scraping techniques.
 ### Development environment 
 
 - **Windows 10 Home**
 - [**Spring Tools 4 for Eclipse Download**](https://download.springsource.com/release/STS4/4.8.0.RELEASE/dist/e4.17/spring-tool-suite-4-4.8.0.RELEASE-e4.17.0-win32.win32.x86_64.self-extracting.jar)
 - [**RedHat Java OpenJDK 8 Download**](https://developers.redhat.com/download-manager/file/java-1.8.0-openjdk-1.8.0.265-3.b01.redhat.windows.x86_64.msi) (download only if you do not have, **_at least_**, a JDK 8 installed, either from RedHat, Oracle or another vendor.).
+
+
 
 ### Technical documentation:
 
